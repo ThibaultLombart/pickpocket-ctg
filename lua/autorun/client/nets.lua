@@ -1,8 +1,20 @@
 -- Réception des données du serveur pour la progression du pickpocket
 net.Receive("PickpocketStart", function()
-    local progress = net.ReadFloat()
+    LocalPlayer().PickpocketProgress = 0
 
-    LocalPlayer().PickpocketProgress = progress
+    local start = CurTime()
+    local duration = net.ReadFloat()
+
+        -- Crée un timer pour mettre à jour la progression
+        timer.Create("PickpocketTimer", 0.05, 0, function()
+            local progress = (CurTime() - start) / duration * 100
+            LocalPlayer().PickpocketProgress = progress
+
+            if LocalPlayer().PickpocketProgress >= 100 then
+                LocalPlayer().PickpocketProgress = 100
+                timer.Remove("PickpocketTimer")
+            end
+        end)
 end)
 
 -- Réinitialise la progression à 0
@@ -25,16 +37,9 @@ hook.Add("HUDPaint", "DrawPickpocketProgress", function()
     local width, height = screenWidth * 0.2, screenHeight * 0.025  -- Utilise 20% de la largeur et 2.5% de la hauteur de l'écran
     local x, y = (screenWidth - width) / 2, screenHeight * 0.8  -- Centre la barre horizontalement et place à 80% de la hauteur de l'écran
 
-
-
     -- Dessine la barre si la progression est valide (supérieure ou égale à 0)
     if progress >= 0 then
-
-        -- Affiche un message au-dessus de la barre
-        draw.SimpleText("Vous êtes en train de voler quelqu'un", "DermaLarge", screenWidth / 2, y - 50, Color(68, 68, 68), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
         draw.RoundedBox(8, x, y, width, height, Color(0, 0, 0, 150))
-        draw.RoundedBox(8, x + 2, y + 2, (width - 4) * (progress / 100), height - 4, Color(68, 68, 68)) -- Utilise un vert plus foncé
-        draw.SimpleText(math.floor(progress) .. "%", "DermaLarge", x + width / 2, y + height / 2, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- Augmente la taille du texte
+        draw.RoundedBox(8, x + 2, y + 2, (width - 4) * (progress / 100), height - 4, Color(160, 0, 0))
     end
 end)

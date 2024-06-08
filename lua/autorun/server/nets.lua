@@ -21,7 +21,6 @@ net.Receive("PickpocketStart", function(len, ply)
 
     -- On vérifie si le joueur est derrière la cible
     if not IsBehind(ply, target) then
-
         ply:ChatPrint("Vous devez être collé derrière la personne pour la voler.")
         return
     end

@@ -37,6 +37,11 @@ SWEP.Secondary.Ammo = "none"
 
 SWEP.PickpocketCooldowns = {}  -- Table pour stocker les délais de pickpocket
 
+-- Holdtype du SWEP
+function SWEP:Initialize()
+    self:SetHoldType("normal") -- Ajuste l'animation de la main
+end
+
 -- Fonction pour le clic de la souris
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + 1)

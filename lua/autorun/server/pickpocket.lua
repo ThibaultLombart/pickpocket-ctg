@@ -1,9 +1,9 @@
 print("Pickpocket pickpocket.lua")
 
 -- Fonction pour envoyer la progression au client
-local function SendProgress(ply, progress)
+local function SendStart(ply, duration)
     net.Start("PickpocketStart")
-    net.WriteFloat(progress)
+    net.WriteFloat(duration)
     net.Send(ply)
 end
 
@@ -75,7 +75,7 @@ function StartPickpocket(ply,target)
     local totalTime = 10 -- Durée totale en secondes
     local increment = 1 / totalTime -- Valeur d'incrémentation par seconde
 
-    SendProgress(ply, progress)
+    SendStart(ply, totalTime)
 
     target.LastPosition = target:GetPos()  -- Stocke la position actuelle de la cible
     -- Timer pour vérifier si la cible bouge
@@ -91,7 +91,6 @@ function StartPickpocket(ply,target)
     timer.Create("PickpocketTimer", 1, totalTime, function()
         if not IsValid(ply) then return end
         progress = progress + increment * 100 -- Progression en pourcentage
-        SendProgress(ply, progress)
         if progress >= 100 then
             StopProgressSuccessfuly(ply,target)
             timer.Remove("PickpocketTimer")
