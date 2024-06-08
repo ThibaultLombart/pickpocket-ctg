@@ -32,18 +32,18 @@ local function StopProgressSuccessfuly(ply,target)
     local moneyStolen = math.random(min, max)
 
     -- Retirer l'argent de la target
-    target:MultiversionAddMoney(-moneyStolen)
+    target:addMoney(-moneyStolen)
 
     -- Ajouter l'argent au voleur
-    ply:MultiversionAddMoney(moneyStolen)
+    ply:addMoney(moneyStolen)
 
 
     if(moneyStolen == 0) then
-        ply:MultiversionNotify(1, "Vous avez tenté de voler cette personne mais elle n'avait rien sur elle !") // 1 = erreur
-        target:MultiversionNotify(1, "Quelqu'un a tenté de vous voler mais vous n'aviez rien sur vous !") // 1 = erreur
+        ply:ChatPrint("Vous avez tenté de voler mais vous n'avez rien trouvé sur la personne !")
+        target:ChatPrint("Quelqu'un a tenté de vous voler mais n'a rien trouvé sur vous !")
     else
-        ply:MultiversionNotify(0, "Vous avez volé "..tostring(moneyStolen).." pièces d'or !") // 0 = succès
-        target:MultiversionNotify(1, "Quelqu'un vous a volé "..moneyStolen.." pièces d'or de votre poche !") // 1 = erreur
+        ply:ChatPrint("Vous avez volé "..tostring(moneyStolen).." pièces d'or !")
+        target:ChatPrint("Quelqu'un vous a volé "..tostring(moneyStolen).." pièces d'or de votre poche !")
     end
     
 
@@ -61,10 +61,8 @@ local function StopProgressFailed(ply,target)
     -- Joue le son préchargé à la position de la cible pour toutes les entités à proximité
     target:EmitSound("soundGoldBag.wav")
 
-    ply:MultiversionNotify(1, "Votre main a glissé et vous n'avez pas réussi a voler cette personne !") // 1 = erreur
-    target:MultiversionNotify(1, "Quelqu'un a tenté de vous voler mais sa main a glissé !") // 1 = erreur
-
-
+    ply:ChatPrint("Votre main a glissé et vous n'avez pas réussi a voler cette personne !")
+    target:ChatPrint("Quelqu'un a tenté de vous voler mais sa main a glissé !")
 
     net.Start("PickpocketStop")
     net.WriteBool(false)

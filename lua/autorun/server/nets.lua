@@ -22,13 +22,13 @@ net.Receive("PickpocketStart", function(len, ply)
     -- On vérifie si le joueur est derrière la cible
     if not IsBehind(ply, target) then
 
-        ply:MultiversionNotify(3, "Vous devez être collé derrière la personne pour la voler.") // 3 = hint
+        ply:ChatPrint("Vous devez être collé derrière la personne pour la voler.")
         return
     end
 
     -- On vérifie si le pickpocket est en cooldown
     if IsPickpocketOnCooldown(ply, target) then
-        ply:MultiversionNotify(1, "Vous devez attendre ".. tostring( math.ceil(pickpocketListing[ply:SteamID64()][target:SteamID64()] - CurTime()) ) .." secondes avant de voler à nouveau cette personne.") // 1 = erreur
+        ply:ChatPrint("Vous devez attendre ".. tostring( math.ceil(pickpocketListing[ply:SteamID64()][target:SteamID64()] - CurTime()) ) .." secondes avant de voler à nouveau cette personne.")
         return
     end
 
