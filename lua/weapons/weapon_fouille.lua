@@ -3,7 +3,7 @@ if SERVER then
 end
 
 -- Nommez le SWEP
-SWEP.PrintName = "Pickpocket"
+SWEP.PrintName = "Vol à la tire"
 SWEP.Author = "Thybax"
 SWEP.Instructions = "Cliquez sur un joueur dans son dos pour fouiller ses poches."
 SWEP.Category = "CTG - Pickpocket"
@@ -56,6 +56,8 @@ end
 
 -- Fonction pour le clic droit de la souris
 function SWEP:SecondaryAttack()
+    self:SetNextSecondaryFire(CurTime() + 1)
+
     self:PrimaryAttack()
 end
 

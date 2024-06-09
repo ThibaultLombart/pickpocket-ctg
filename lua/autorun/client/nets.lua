@@ -40,6 +40,6 @@ hook.Add("HUDPaint", "DrawPickpocketProgress", function()
     -- Dessine la barre si la progression est valide (supérieure ou égale à 0)
     if progress >= 0 then
         draw.RoundedBox(8, x, y, width, height, Color(0, 0, 0, 150))
-        draw.RoundedBox(8, x + 2, y + 2, (width - 4) * (progress / 100), height - 4, Color(160, 0, 0))
+        draw.RoundedBox(8, x + 2, y + 2, (width - 4) * (progress / 100), height - 4, Color(182, 0, 0))
     end
 end)

@@ -12,24 +12,39 @@ util.AddNetworkString("PickpocketStealStop")
 -- Données locales
 local pickpocketCooldown = 60*5  -- Cooldown en secondes (ici 5 minutes)
 local pickpocketListing = {}  -- Table pour stocker les délais de pickpocket
+local pickpocketListUsage = {} -- Table avec tout ceux qui utilisent le pickpocket en ce moment
  
 -- Nets reçus
 net.Receive("PickpocketStart", function(len, ply)
     local target = player.GetBySteamID64(net.ReadString())
+
+    if(pickpocketListUsage[ply:SteamID64()] == nil) then
+        pickpocketListUsage[ply:SteamID64()] = false
+    end
+
+    if(pickpocketListUsage[ply:SteamID64()] == true) then
+        return
+    end
+
+    pickpocketListUsage[ply:SteamID64()] = true
 
     if not IsValid(target) or not target:IsPlayer() then return end
 
     -- On vérifie si le joueur est derrière la cible
     if not IsBehind(ply, target) then
         ply:ChatPrint("Vous devez être collé derrière la personne pour la voler.")
+        pickpocketListUsage[ply:SteamID64()] = false
         return
     end
 
     -- On vérifie si le pickpocket est en cooldown
     if IsPickpocketOnCooldown(ply, target) then
         ply:ChatPrint("Vous devez attendre ".. tostring( math.ceil(pickpocketListing[ply:SteamID64()][target:SteamID64()] - CurTime()) ) .." secondes avant de voler à nouveau cette personne.")
+        pickpocketListUsage[ply:SteamID64()] = false
         return
     end
+
+    pickpocketListUsage[ply:SteamID64()] = false
 
     -- On démarre le pickpocket
     AddPickpocket(ply:SteamID64(), target:SteamID64(), CurTime() + pickpocketCooldown)
