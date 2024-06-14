@@ -28,7 +28,10 @@ net.Receive("PickpocketStart", function(len, ply)
 
     pickpocketListUsage[ply:SteamID64()] = true
 
-    if not IsValid(target) or not target:IsPlayer() then return end
+    if not IsValid(target) or not target:IsPlayer() then
+        pickpocketListUsage[ply:SteamID64()] = false
+        return
+    end
 
     -- On vérifie si le joueur est derrière la cible
     if not IsBehind(ply, target) then
@@ -57,9 +60,6 @@ end)
 function AddPickpocket(steamIDRobber, steamIDRobbed, duration)
     if not pickpocketListing[steamIDRobber] then
         pickpocketListing[steamIDRobber] = {}
-    end
-    if not pickpocketListing[steamIDRobber][steamIDRobbed] then
-        pickpocketListing[steamIDRobber][steamIDRobbed] = {}
     end
     pickpocketListing[steamIDRobber][steamIDRobbed] = duration
 end
